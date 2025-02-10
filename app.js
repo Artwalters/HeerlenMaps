@@ -398,63 +398,106 @@ let geolocationManager = new GeolocationManager(map);
 window.geolocationManager = geolocationManager; 
 
 
-//! 3d models ///
-let tb = new Threebox(map, map.getCanvas().getContext("webgl"), {
-  defaultLights: !0,
-});
-function addThreeboxLayer() {
-  threeboxLayerVisible ||
-    (map.addLayer({
-      id: "custom-threebox-model",
-      type: "custom",
-      renderingMode: "3d",
-      onAdd: function () {
-        let _ = tb.getCanvas();
-        _ && (_.style.pointerEvents = "none"),
-          [
-            {
-              url: "https://cdn.jsdelivr.net/gh/quentinwalters/HeerlenDoen_Glb-files@main/models/schuncklogo.glb",
-              scale: { x: 1.3, y: 1.3, z: 1.3 },
-              coords: [5.97899, 50.887957],
-              rotation: { x: 0, y: 0, z: 295 },
-            },
-            {
-              url: "https://cdn.jsdelivr.net/gh/quentinwalters/HeerlenDoen_Glb-files@main/models/theaterheerlen.glb",
-              scale: { x: 0.6, y: 0.6, z: 0.6 },
-              coords: [5.971979, 50.886074],
-              rotation: { x: 0, y: 0, z: 27 },
-            },
-          ].forEach((_) => {
-            tb.loadObj(
-              {
-                obj: _.url,
-                type: "gltf",
-                scale: _.scale,
-                units: "meters",
-                rotation: { x: 90, y: -90, z: 0 },
-              },
-              (c) => {
-                c.setCoords(_.coords), c.setRotation(_.rotation), tb.add(c);
-              }
-            );
-          });
-      },
-      render() {
-        tb.update();
-      },
-    }),
-    (threeboxLayerVisible = !0));
-}
-function removeThreeboxLayer() {
-  map.getLayer("custom-threebox-model") &&
-    (map.removeLayer("custom-threebox-model"), (threeboxLayerVisible = !1));
-}
-function loadThreeboxOnLargeDevices() {
-  window.matchMedia("(min-width: 479px)").matches && !threeboxLayerVisible
-    ? addThreeboxLayer()
-    : threeboxLayerVisible && removeThreeboxLayer();
-} 
+// Initialize Threebox
+let tb;
+let threeboxLayerVisible = false;
 
+function initThreebox() {
+  tb = new Threebox(map, map.getCanvasContainer(), {
+    defaultLights: true,
+    enableSelectingObjects: true,
+    enableTooltips: true,
+    enableDraggingObjects: true,
+    realSunlight: true
+  });
+}
+
+function addThreeboxLayer() {
+  if (threeboxLayerVisible) return;
+  
+  try {
+    map.addLayer({
+      id: 'custom-threebox-model',
+      type: 'custom',
+      renderingMode: '3d',
+      onAdd: function() {
+        // Initialize Threebox if not already done
+        if (!tb) initThreebox();
+
+        const models = [
+          {
+            url: 'https://cdn.jsdelivr.net/gh/quentinwalters/HeerlenDoen_Glb-files@main/models/schuncklogo.glb',
+            scale: { x: 1.3, y: 1.3, z: 1.3 },
+            coords: [5.97899, 50.887957],
+            rotation: { x: 0, y: 0, z: 295 }
+          },
+          {
+            url: 'https://cdn.jsdelivr.net/gh/quentinwalters/HeerlenDoen_Glb-files@main/models/theaterheerlen.glb',
+            scale: { x: 0.6, y: 0.6, z: 0.6 },
+            coords: [5.971979, 50.886074],
+            rotation: { x: 0, y: 0, z: 27 }
+          }
+        ];
+
+        models.forEach(model => {
+          tb.loadObj({
+            obj: model.url,
+            type: 'gltf',
+            scale: model.scale,
+            units: 'meters',
+            rotation: { x: 90, y: -90, z: 0 },
+            onLoad: (obj) => {
+              console.log('Model loaded successfully:', model.url);
+              obj.setCoords(model.coords);
+              obj.setRotation(model.rotation);
+              tb.add(obj);
+            },
+            onError: (error) => {
+              console.error('Error loading model:', model.url, error);
+            }
+          });
+        });
+      },
+      render: function() {
+        if (tb) tb.update();
+      }
+    });
+    threeboxLayerVisible = true;
+    console.log('Threebox layer added successfully');
+  } catch (error) {
+    console.error('Error adding Threebox layer:', error);
+  }
+}
+
+function removeThreeboxLayer() {
+  if (map.getLayer('custom-threebox-model')) {
+    map.removeLayer('custom-threebox-model');
+    threeboxLayerVisible = false;
+    console.log('Threebox layer removed');
+  }
+}
+
+function loadThreeboxOnLargeDevices() {
+  if (window.matchMedia("(min-width: 479px)").matches && !threeboxLayerVisible) {
+    console.log('Adding Threebox layer for large device');
+    addThreeboxLayer();
+  } else if (threeboxLayerVisible) {
+    console.log('Removing Threebox layer');
+    removeThreeboxLayer();
+  }
+}
+
+// Event listeners
+map.on('load', () => {
+  console.log('Map loaded, initializing Threebox');
+  initThreebox();
+  loadThreeboxOnLargeDevices();
+});
+
+window.addEventListener('resize', () => {
+  console.log('Window resized, checking device size');
+  loadThreeboxOnLargeDevices();
+});
 
 //! cms data & markers ////
 function getGeoData() {
