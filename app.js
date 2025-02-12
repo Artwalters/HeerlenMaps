@@ -1,3 +1,4 @@
+
 $(".locations-map_wrapper").removeClass("is--show"),
   (mapboxgl.accessToken =
     "pk.eyJ1IjoicHJvamVjdGhlZXJsZW4iLCJhIjoiY2x4eWVmcXBvMWozZTJpc2FqbWgzcnAyeCJ9.SVOVbBG6o1lHs6TwCudR9g");
@@ -1154,35 +1155,33 @@ map.on("click", "location-markers", async (_) => {
   });
 
 
-//! Threejs layer 3d models
+  const modelConfigs = [
+    {
+        id: 'schunck',
+        origin: [50.88778235149691, 5.979389928151281],
+        altitude: 0,
+        rotate: [Math.PI / 2, 0.45, 0],
+        url: 'https://cdn.jsdelivr.net/gh/Artwalters/3dmodels_heerlen@main/schunckv5.glb',
+        scale: 1.3
+    },
+    {
+        id: 'theater',
+        origin: [50.886541206107225, 5.972454838314243],
+        altitude: 0,
+        rotate: [Math.PI / 2, 2.05, 0],
+        url: 'https://cdn.jsdelivr.net/gh/Artwalters/3dmodels_heerlen@main/theaterheerlenv4.glb',
+        scale: 0.6
+    }
+];
 
+// Zoom level configuratie
+const ZOOM_MAX = 15.5;  // Volledig zichtbaar
+const ZOOM_MIN = 14.5;  // Volledig onzichtbaar
+const MAX_HEIGHT_OFFSET = 100;  // Maximum "zink" afstand
 
-  
-        const modelConfigs = [
-            {
-                id: 'schunck',
-                origin: [50.88778235149691, 5.979389928151281],
-                altitude: 0,
-                rotate: [Math.PI / 2, 0.45, 0],
-                url: 'https://cdn.jsdelivr.net/gh/Artwalters/3dmodels_heerlen@main/schunckv5.glb',
-                scale: 1.3  // Voeg deze regel toe (2 = twee keer zo groot, 0.5 = half zo groot)
-
-            },
-            {
-                id: 'theater',
-                origin: [50.886541206107225, 5.972454838314243],
-                altitude: 0,
-                rotate: [Math.PI / 2, 2.05, 0],
-                url: 'https://cdn.jsdelivr.net/gh/Artwalters/3dmodels_heerlen@main/theaterheerlenv4.glb',
-                scale: 0.6  // Voeg deze regel toe (2 = twee keer zo groot, 0.5 = half zo groot)
-
-            }
-
-        ];
-
-        const modelTransforms = modelConfigs.map(config => {
+const modelTransforms = modelConfigs.map(config => {
     const mercatorCoord = mapboxgl.MercatorCoordinate.fromLngLat(
-        [config.origin[1], config.origin[0]], // Hier draaien we ze om voor Mapbox
+        [config.origin[1], config.origin[0]],
         config.altitude
     );
     return {
@@ -1194,112 +1193,150 @@ map.on("click", "location-markers", async (_) => {
         rotateX: config.rotate[0],
         rotateY: config.rotate[1],
         rotateZ: config.rotate[2],
-        scale: mercatorCoord.meterInMercatorCoordinateUnits() * (config.scale || 1)
+        scale: mercatorCoord.meterInMercatorCoordinateUnits() * (config.scale || 1),
+        baseHeight: mercatorCoord.z  // Bewaar de originele hoogte
     };
 });
 
-        const customLayer = {
-            id: '3d-models',
-            type: 'custom',
-            renderingMode: '3d',
-            onAdd: function (map, gl) {
-                this.camera = new THREE.Camera();
-                this.scene = new THREE.Scene();
+const customLayer = {
+    id: '3d-models',
+    type: 'custom',
+    renderingMode: '3d',
 
-                // Basis lichtinstellingen
-                const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-                this.scene.add(ambientLight);
+    onAdd: function(map, gl) {
+        this.camera = new THREE.Camera();
+        this.scene = new THREE.Scene();
 
-                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-                const azimuth = 210 * (Math.PI / 180);
-                const polar = 30 * (Math.PI / 180);
-                
-                directionalLight.position.set(
-                    Math.sin(azimuth) * Math.sin(polar),
-                    Math.cos(azimuth) * Math.sin(polar),
-                    Math.cos(polar)
-                ).normalize();
-                
-                this.scene.add(directionalLight);
+        // Lighting setup
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        this.scene.add(ambientLight);
 
-                // Laad modellen
-                const loader = new THREE.GLTFLoader();
-                modelTransforms.forEach(transform => {
-                    loader.load(transform.url, (gltf) => {
-                        gltf.scene.traverse(child => {
-                            if (child.material) {
-                                // Behoud originele materiaal eigenschappen
-                                child.material.depthWrite = true;
-                                child.material.depthTest = true;
-                                child.material.needsUpdate = true;
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        const azimuth = 210 * (Math.PI / 180);
+        const polar = 30 * (Math.PI / 180);
+        
+        directionalLight.position.set(
+            Math.sin(azimuth) * Math.sin(polar),
+            Math.cos(azimuth) * Math.sin(polar),
+            Math.cos(polar)
+        ).normalize();
+        
+        this.scene.add(directionalLight);
+
+        // Model loader setup
+        const loader = new THREE.GLTFLoader();
+        
+        modelTransforms.forEach(transform => {
+            loader.load(
+                transform.url, 
+                (gltf) => {
+                    gltf.scene.traverse(child => {
+                        if (child.isMesh) {
+                            child.frustumCulled = true;
+                            child.material.precision = 'highp';
+                            
+                            if (child.material.map) {
+                                child.material.map.anisotropy = 4;
+                                child.material.map.minFilter = THREE.LinearMipMapLinearFilter;
                             }
-                        });
-                        gltf.scene.userData.transform = transform;
-                        this.scene.add(gltf.scene);
+                        }
                     });
-                });
 
-                this.map = map;
-                this.renderer = new THREE.WebGLRenderer({
-                    canvas: map.getCanvas(),
-                    context: gl,
-                    antialias: true,
-                    alpha: true
-                });
-
-                this.renderer.autoClear = false;
-                this.renderer.outputEncoding = THREE.sRGBEncoding;
-            },
-
-            render: function (gl, matrix) {
-                const m = new THREE.Matrix4().fromArray(matrix);
-
-                this.scene.children.forEach(child => {
-                    if (child.userData.transform) {
-                        const transform = child.userData.transform;
-                        
-                        const rotationX = new THREE.Matrix4().makeRotationAxis(
-                            new THREE.Vector3(1, 0, 0),
-                            transform.rotateX
-                        );
-                        const rotationY = new THREE.Matrix4().makeRotationAxis(
-                            new THREE.Vector3(0, 1, 0),
-                            transform.rotateY
-                        );
-                        const rotationZ = new THREE.Matrix4().makeRotationAxis(
-                            new THREE.Vector3(0, 0, 1),
-                            transform.rotateZ
-                        );
-
-                        const l = new THREE.Matrix4()
-                            .makeTranslation(
-                                transform.translateX,
-                                transform.translateY,
-                                transform.translateZ
-                            )
-                            .scale(
-                                new THREE.Vector3(
-                                    transform.scale,
-                                    -transform.scale,
-                                    transform.scale
-                                )
-                            )
-                            .multiply(rotationX)
-                            .multiply(rotationY)
-                            .multiply(rotationZ);
-
-                        child.matrix = m.clone().multiply(l);
-                        child.matrixAutoUpdate = false;
-                    }
-                });
-
-                this.renderer.resetState();
-                this.renderer.render(this.scene, this.camera);
-                this.map.triggerRepaint();
-            }
-        };
-
-        map.on('style.load', () => {
-            map.addLayer(customLayer);
+                    gltf.scene.userData.transform = transform;
+                    this.scene.add(gltf.scene);
+                },
+                undefined,
+                (error) => {
+                    console.error(`Error loading model ${transform.id}:`, error);
+                }
+            );
         });
 
+        this.map = map;
+
+        // Renderer setup
+        this.renderer = new THREE.WebGLRenderer({
+            canvas: map.getCanvas(),
+            context: gl,
+            antialias: true,
+            alpha: true,
+            powerPreference: "high-performance"
+        });
+
+        this.renderer.autoClear = false;
+        this.renderer.outputEncoding = THREE.sRGBEncoding;
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    },
+
+    render: function(gl, matrix) {
+        const m = new THREE.Matrix4().fromArray(matrix);
+        const currentZoom = this.map.getZoom();
+        
+        // Bereken de animatie factor (0 = volledig gezakt, 1 = normale hoogte)
+        let heightFactor = 1;
+        if (currentZoom <= ZOOM_MIN) {
+            heightFactor = 0;
+        } else if (currentZoom >= ZOOM_MAX) {
+            heightFactor = 1;
+        } else {
+            heightFactor = (currentZoom - ZOOM_MIN) / (ZOOM_MAX - ZOOM_MIN);
+        }
+        
+        this.scene.children.forEach(child => {
+            if (child.userData.transform) {
+                const transform = child.userData.transform;
+                
+                // Bereken de geanimeerde hoogte
+                const currentHeight = transform.baseHeight - ((1 - heightFactor) * MAX_HEIGHT_OFFSET * transform.scale);
+                
+                const rotationX = new THREE.Matrix4().makeRotationAxis(
+                    new THREE.Vector3(1, 0, 0),
+                    transform.rotateX
+                );
+                const rotationY = new THREE.Matrix4().makeRotationAxis(
+                    new THREE.Vector3(0, 1, 0),
+                    transform.rotateY
+                );
+                const rotationZ = new THREE.Matrix4().makeRotationAxis(
+                    new THREE.Vector3(0, 0, 1),
+                    transform.rotateZ
+                );
+
+                const l = new THREE.Matrix4()
+                    .makeTranslation(
+                        transform.translateX,
+                        transform.translateY,
+                        currentHeight  // Gebruik de geanimeerde hoogte
+                    )
+                    .scale(new THREE.Vector3(
+                        transform.scale,
+                        -transform.scale,
+                        transform.scale * heightFactor  // Pas ook de verticale schaal aan
+                    ))
+                    .multiply(rotationX)
+                    .multiply(rotationY)
+                    .multiply(rotationZ);
+
+                child.matrix = m.clone().multiply(l);
+                child.matrixAutoUpdate = false;
+
+                // Pas ook de opacity aan voor een fade effect
+                child.traverse(object => {
+                    if (object.material) {
+                        object.material.opacity = heightFactor;
+                        object.material.transparent = true;
+                    }
+                });
+            }
+        });
+
+        this.renderer.resetState();
+        this.renderer.render(this.scene, this.camera);
+        this.map.triggerRepaint();
+    }
+};
+
+// Layer toevoegen aan de map
+map.on('style.load', () => {
+    map.addLayer(customLayer);
+});
