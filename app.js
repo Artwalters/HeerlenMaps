@@ -2,9 +2,9 @@ $(".locations-map_wrapper").removeClass("is--show"),
   (mapboxgl.accessToken =
     "pk.eyJ1IjoicHJvamVjdGhlZXJsZW4iLCJhIjoiY2x4eWVmcXBvMWozZTJpc2FqbWgzcnAyeCJ9.SVOVbBG6o1lHs6TwCudR9g");
 let activePopup = null,
-  isFlipped = !1,
-  threeboxLayerVisible = !1,
+//   isFlipped = !1,
   markersAdded = !1,
+  modelsAdded = !1,
   mapLocations = { type: "FeatureCollection", features: [] },
   map = new mapboxgl.Map({
     container: "map",
@@ -16,7 +16,7 @@ let activePopup = null,
     antialias: !0,
     interactive: !0,
   }); 
-  
+
   //! geo locatie /////
 class GeolocationManager {
   constructor(_) {
@@ -395,65 +395,6 @@ let geolocationManager = new GeolocationManager(map);
 window.geolocationManager = geolocationManager; 
 
 
-// //! 3d models ///
-
-
-// let tb = new Threebox(map, map.getCanvas().getContext("webgl"), {
-//   defaultLights: !0,
-// });
-// function addThreeboxLayer() {
-//   threeboxLayerVisible ||
-//     (map.addLayer({
-//       id: "custom-threebox-model",
-//       type: "custom",
-//       renderingMode: "3d",
-//       onAdd: function () {
-//         let _ = tb.getCanvas();
-//         _ && (_.style.pointerEvents = "none"),
-//           [
-//             {
-//               url: "https://cdn.jsdelivr.net/gh/quentinwalters/HeerlenDoen_Glb-files@main/models/schuncklogo.glb",
-//               scale: { x: 1.3, y: 1.3, z: 1.3 },
-//               coords: [5.97899, 50.887957],
-//               rotation: { x: 0, y: 0, z: 295 },
-//             },
-//             {
-//               url: "https://cdn.jsdelivr.net/gh/quentinwalters/HeerlenDoen_Glb-files@main/models/theaterheerlen.glb",
-//               scale: { x: 0.6, y: 0.6, z: 0.6 },
-//               coords: [5.971979, 50.886074],
-//               rotation: { x: 0, y: 0, z: 27 },
-//             },
-//           ].forEach((_) => {
-//             tb.loadObj(
-//               {
-//                 obj: _.url,
-//                 type: "gltf",
-//                 scale: _.scale,
-//                 units: "meters",
-//                 rotation: { x: 90, y: -90, z: 0 },
-//               },
-//               (c) => {
-//                 c.setCoords(_.coords), c.setRotation(_.rotation), tb.add(c);
-//               }
-//             );
-//           });
-//       },
-//       render() {
-//         tb.update();
-//       },
-//     }),
-//     (threeboxLayerVisible = !0));
-// }
-// function removeThreeboxLayer() {
-//   map.getLayer("custom-threebox-model") &&
-//     (map.removeLayer("custom-threebox-model"), (threeboxLayerVisible = !1));
-// }
-// function loadThreeboxOnLargeDevices() {
-//   window.matchMedia("(min-width: 479px)").matches && !threeboxLayerVisible
-//     ? addThreeboxLayer()
-//     : threeboxLayerVisible && removeThreeboxLayer();
-// } 
-
 
 //! cms data & markers ////
 function getGeoData() {
@@ -524,8 +465,6 @@ function getARData() {
     mapLocations.features.push(e);
   });
 }
-window.addEventListener("load", loadThreeboxOnLargeDevices),
-  window.addEventListener("resize", loadThreeboxOnLargeDevices),
   getGeoData(),
   getARData(); 
   
@@ -639,8 +578,7 @@ map.on("mouseenter", "location-markers", () => {
   }); 
   
   
-//! filter voor markers /////
-
+  //! filter voor markers /////
 let activeFilters = new Set();
 function setupLocationFilters() {
   document.querySelectorAll(".filter-btn").forEach((_) => {
@@ -667,7 +605,6 @@ function applyMapFilters() {
 
 
 //! popup logica
-
 let createPopupContent = (_) => {
   let c = "ar" === _.type,
     a = `
@@ -853,7 +790,6 @@ ${
 
 
 //! popup interacties //
-
 function setupPopupInteractions(_, c, a) {
   let e = _.getElement(),
     t = e.querySelector(".mapboxgl-popup-content"),
@@ -1087,16 +1023,20 @@ function showImagePopup(_, c, a) {
         }, 400);
     });
 }
+
 function closeItem() {
   $(".locations-map_item").removeClass("is--show");
 }
+
 function closeItemIfVisible() {
   $(".locations-map_item").hasClass("is--show") && closeItem();
 }
-function createMapOverlay() {
-  let _ = document.createElement("div");
-  (_.className = "map-border-overlay"), document.body.appendChild(_);
-}
+
+// function createMapOverlay() {
+//   let _ = document.createElement("div");
+//   (_.className = "map-border-overlay"), document.body.appendChild(_);
+// }
+
 map.on("click", "location-markers", async (_) => {
   let c = _.features[0].geometry.coordinates.slice(),
     a = _.features[0].properties;
@@ -1159,7 +1099,7 @@ map.on("click", "location-markers", async (_) => {
     loadIcons(),
       addCustomMarkers(),
       setupLocationFilters(),
-      createMapOverlay(),
+      // createMapOverlay(),
       setTimeout(() => {
         let _ = window.matchMedia("(max-width: 479px)").matches ? 17 : 18;
         map.jumpTo({
@@ -1212,4 +1152,154 @@ map.on("click", "location-markers", async (_) => {
       }
     });
   });
+
+
+//! Threejs layer 3d models
+
+
+  
+        const modelConfigs = [
+            {
+                id: 'schunck',
+                origin: [50.88778235149691, 5.979389928151281],
+                altitude: 0,
+                rotate: [Math.PI / 2, 0.45, 0],
+                url: 'https://cdn.jsdelivr.net/gh/Artwalters/3dmodels_heerlen@main/schunckv5.glb',
+                scale: 1.3  // Voeg deze regel toe (2 = twee keer zo groot, 0.5 = half zo groot)
+
+            },
+            {
+                id: 'theater',
+                origin: [50.886541206107225, 5.972454838314243],
+                altitude: 0,
+                rotate: [Math.PI / 2, 2.05, 0],
+                url: 'https://cdn.jsdelivr.net/gh/Artwalters/3dmodels_heerlen@main/theaterheerlenv4.glb',
+                scale: 0.6  // Voeg deze regel toe (2 = twee keer zo groot, 0.5 = half zo groot)
+
+            }
+
+        ];
+
+        const modelTransforms = modelConfigs.map(config => {
+    const mercatorCoord = mapboxgl.MercatorCoordinate.fromLngLat(
+        [config.origin[1], config.origin[0]], // Hier draaien we ze om voor Mapbox
+        config.altitude
+    );
+    return {
+        id: config.id,
+        url: config.url,
+        translateX: mercatorCoord.x,
+        translateY: mercatorCoord.y,
+        translateZ: mercatorCoord.z,
+        rotateX: config.rotate[0],
+        rotateY: config.rotate[1],
+        rotateZ: config.rotate[2],
+        scale: mercatorCoord.meterInMercatorCoordinateUnits() * (config.scale || 1)
+    };
+});
+
+        const customLayer = {
+            id: '3d-models',
+            type: 'custom',
+            renderingMode: '3d',
+            onAdd: function (map, gl) {
+                this.camera = new THREE.Camera();
+                this.scene = new THREE.Scene();
+
+                // Basis lichtinstellingen
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+                this.scene.add(ambientLight);
+
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+                const azimuth = 210 * (Math.PI / 180);
+                const polar = 30 * (Math.PI / 180);
+                
+                directionalLight.position.set(
+                    Math.sin(azimuth) * Math.sin(polar),
+                    Math.cos(azimuth) * Math.sin(polar),
+                    Math.cos(polar)
+                ).normalize();
+                
+                this.scene.add(directionalLight);
+
+                // Laad modellen
+                const loader = new THREE.GLTFLoader();
+                modelTransforms.forEach(transform => {
+                    loader.load(transform.url, (gltf) => {
+                        gltf.scene.traverse(child => {
+                            if (child.material) {
+                                // Behoud originele materiaal eigenschappen
+                                child.material.depthWrite = true;
+                                child.material.depthTest = true;
+                                child.material.needsUpdate = true;
+                            }
+                        });
+                        gltf.scene.userData.transform = transform;
+                        this.scene.add(gltf.scene);
+                    });
+                });
+
+                this.map = map;
+                this.renderer = new THREE.WebGLRenderer({
+                    canvas: map.getCanvas(),
+                    context: gl,
+                    antialias: true,
+                    alpha: true
+                });
+
+                this.renderer.autoClear = false;
+                this.renderer.outputEncoding = THREE.sRGBEncoding;
+            },
+
+            render: function (gl, matrix) {
+                const m = new THREE.Matrix4().fromArray(matrix);
+
+                this.scene.children.forEach(child => {
+                    if (child.userData.transform) {
+                        const transform = child.userData.transform;
+                        
+                        const rotationX = new THREE.Matrix4().makeRotationAxis(
+                            new THREE.Vector3(1, 0, 0),
+                            transform.rotateX
+                        );
+                        const rotationY = new THREE.Matrix4().makeRotationAxis(
+                            new THREE.Vector3(0, 1, 0),
+                            transform.rotateY
+                        );
+                        const rotationZ = new THREE.Matrix4().makeRotationAxis(
+                            new THREE.Vector3(0, 0, 1),
+                            transform.rotateZ
+                        );
+
+                        const l = new THREE.Matrix4()
+                            .makeTranslation(
+                                transform.translateX,
+                                transform.translateY,
+                                transform.translateZ
+                            )
+                            .scale(
+                                new THREE.Vector3(
+                                    transform.scale,
+                                    -transform.scale,
+                                    transform.scale
+                                )
+                            )
+                            .multiply(rotationX)
+                            .multiply(rotationY)
+                            .multiply(rotationZ);
+
+                        child.matrix = m.clone().multiply(l);
+                        child.matrixAutoUpdate = false;
+                    }
+                });
+
+                this.renderer.resetState();
+                this.renderer.render(this.scene, this.camera);
+                this.map.triggerRepaint();
+            }
+        };
+
+        map.on('style.load', () => {
+            map.addLayer(customLayer);
+        });
 
