@@ -14,6 +14,44 @@
   .mapboxgl-canvas {
     pointer-events: auto !important;
   }
+
+  /* Z-index Management */
+  :root {
+    --z-map: 1;
+    --z-controls: 100;
+    --z-popups: 200;
+    --z-modals: 300;
+    --z-notifications: 400;
+  }
+  
+  .mapboxgl-map {
+    z-index: var(--z-map);
+  }
+  
+  .mapboxgl-ctrl-group {
+    z-index: var(--z-controls);
+  }
+  
+  .mapboxgl-popup {
+    z-index: var(--z-popups);
+  }
+  
+  .location-boundary-popup {
+    z-index: var(--z-modals);
+  }
+  
+  .geolocation-error-notification {
+    z-index: var(--z-notifications);
+  }
+  
+  /* Print Styles */
+  @media print {
+    .mapboxgl-ctrl-group,
+    .location-boundary-popup,
+    .geolocation-error-notification {
+        display: none !important;
+    }
+  }
   
   /* mapbox */
   .mapboxgl-ctrl-logo {
@@ -452,6 +490,64 @@
     background: transparent;  /* Transparante track */
     border-radius: 0;  /* Verwijder afronding */
   }
+
+  /* Mobile aanpassingen */
+@media screen and (max-width: 767px) {
+  .mapboxgl-popup-content {
+      width: 260px !important;  /* Smallere breedte voor mobiel */
+  }
+
+  /* Maak de popup inhoud compacter */
+  .popup-title {
+      margin-top: 2.5em;
+  }
+
+  p{
+    font-size: 12px;
+    line-height: 1.5;
+  
+  }
+
+  .content-wrapper {
+    padding: 25px;
+  }
+
+  .impressie-button {
+    bottom: 30px;
+    right: 30px;
+  }
+  
+  .more-info-button {
+    bottom: 30px;
+    left: 30px;
+  }
+
+  .popup-description {
+    max-height: 8em;
+    margin-top: 1em;
+    margin-bottom: 5em;
+    margin-right: -15px;
+    padding-right: 15px;
+    font-family: poppins, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-y: scroll;
+    pointer-events: auto !important;
+}
+
+.button-base {
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  transition: all .3s;
+  position: absolute;
+}
+
+.opening-hours th {
+  width: 140px;
+}
+
+  }
   
   
   /* specifieke styling details card */
@@ -544,6 +640,20 @@
     outline: 2px solid rgba(255,255,255,0.5);
     outline-offset: 2px;
   }
+
+    /* Mobile aanpassingen */
+@media screen and (max-width: 767px) {
+.opening-hours th {
+  width: 84px;
+}
+
+.popup-title {
+  margin-top: 2.5em;
+  font-size: 2.5em !important;
+}
+
+  }
+  
   
   
   /* Image Popup Specific */
@@ -604,44 +714,9 @@
     font-family: poppins, sans-serif;
     text-transform: uppercase;
   }
-  
-  /* Z-index Management */
-  :root {
-    --z-map: 1;
-    --z-controls: 100;
-    --z-popups: 200;
-    --z-modals: 300;
-    --z-notifications: 400;
-  }
-  
-  .mapboxgl-map {
-    z-index: var(--z-map);
-  }
-  
-  .mapboxgl-ctrl-group {
-    z-index: var(--z-controls);
-  }
-  
-  .mapboxgl-popup {
-    z-index: var(--z-popups);
-  }
-  
-  .location-boundary-popup {
-    z-index: var(--z-modals);
-  }
-  
-  .geolocation-error-notification {
-    z-index: var(--z-notifications);
-  }
-  
-  /* Print Styles */
-  @media print {
-    .mapboxgl-ctrl-group,
-    .location-boundary-popup,
-    .geolocation-error-notification {
-        display: none !important;
-    }
-  }
+
+
+
   
   /* overlay voor map */
   
@@ -666,6 +741,7 @@
    */
   
   /* ar marker  */
+  
   
   
 
