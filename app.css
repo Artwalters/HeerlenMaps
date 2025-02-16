@@ -444,6 +444,10 @@
     bottom: 30px;
     left: 30px;
   }
+  .terug-button {
+    bottom: 30px;
+    left: 30px;
+  }
   
   .close-button {
     position: absolute;
@@ -556,6 +560,7 @@
   .popup-back .content-wrapper {
     padding: 30px;
     color: white;
+    height: 100%;
   }
   
   .info-content {
@@ -741,7 +746,6 @@
    */
   
   /* ar marker  */
-  
   
   
 
