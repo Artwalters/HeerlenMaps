@@ -470,6 +470,7 @@ function getARData() {
         image_ar: _.querySelector("#image_ar").value,
         description_ar: _.querySelector("#description_ar").value,
         link_ar: _.querySelector("#link_ar").value,
+
       },
       e = {
         type: "Feature",
@@ -484,7 +485,7 @@ function getARData() {
           description: a.description_ar,
           arrayID: c,
           image: a.image_ar,
-          color: "#4B83F2",
+          color: "black",
           link_ar: a.link_ar,
         },
       };
@@ -693,7 +694,7 @@ let createPopupContent = (_) => {
           }
           <div class="content-wrapper">
             <div class="popup-title">${_.name}</div>
-            <div class="popup-description-ar"></div>
+            <div class="popup-description">${_.description}</div>
 ${
   _.image
     ? `<button class="impressie-button button-base" onclick="window.open('${_.link_ar}', '_blank')">Start AR</button>`
@@ -753,7 +754,7 @@ ${
      <div class="popup-side popup-back">
   <div class="content-wrapper">
 
-    <div class="popup-title details">${_.name || 'Naam niet beschikbaar'}</div>
+    <div class="popup-title details">${_.name || 'Naam error'}</div>
   <div class="info-content">
     <dl class="contact-container">
       <div class="info-row">
@@ -769,7 +770,7 @@ ${
             >
               ${_.locatie}
             </a>
-          ` : `<span class="error-message">Adres niet beschikbaar</span>`}
+          ` : `<span class="error-message">Adres error</span>`}
         </dd>
       </div>
       <div class="info-row">
@@ -783,7 +784,7 @@ ${
             >
               ${_.telefoonummer}
             </a>
-          ` : `<span class="error-message">Telefoonnummer niet beschikbaar</span>`}
+          ` : `<span class="error-message">Telefoonnummer error</span>`}
         </dd>
       </div>
       <div class="info-row">
@@ -799,7 +800,7 @@ ${
             >
               ${_.name.replace(/^https?:\/\//i, '').toUpperCase()}
             </a>
-          ` : `<span class="error-message">Website niet beschikbaar</span>`}
+          ` : `<span class="error-message">Website error</span>`}
         </dd>
       </div>
     </dl>
@@ -1308,12 +1309,13 @@ const customLayer = {
     this.camera = new THREE.Camera();
 
     // Aangepaste lichtsetup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.51);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.57);
     this.scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.51);
-    const azimuth = 220 * (Math.PI / 180);
-    const polar = 30 * (Math.PI / 180);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.57);
+    directionalLight.color.setHex(0xfcfcfc); // Lichtgrijze tint voor koeler licht
+    const azimuth = 210 * (Math.PI / 180);
+    const polar = 50 * (Math.PI / 180);
     directionalLight.position.set(
       Math.sin(azimuth) * Math.sin(polar),
       Math.cos(azimuth) * Math.sin(polar),
@@ -1405,4 +1407,3 @@ const customLayer = {
 map.on('style.load', () => {
   map.addLayer(customLayer);
 });
-
