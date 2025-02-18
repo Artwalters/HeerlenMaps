@@ -393,6 +393,17 @@
     cursor: grab;
     color: white;
   }
+
+  .gradient-bottom{
+    position: absolute;
+    bottom: 7.9em;
+    left: 0;
+    right: 0;
+    height: 1em;
+    background: linear-gradient(to top, #eb5f5e 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 2;
+}
   
   .popup-description-ar {
     font-family: poppins, sans-serif;
@@ -474,25 +485,22 @@
   }
   
   /* Clean Bar Scrollbar Styling */
-  .popup-description {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
-    -webkit-overflow-scrolling: touch;
-  }
   
+
   .popup-description::-webkit-scrollbar {
-    width: 3px;
+    width: 5px;
+    background-color: transparent;
   }
   
   .popup-description::-webkit-scrollbar-thumb {
+    border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 0;  /* Verwijder afronding voor een strakke balk */
-    min-height: 50px; /* Minimale hoogte voor de balk */
   }
   
   .popup-description::-webkit-scrollbar-track {
-    background: transparent;  /* Transparante track */
-    border-radius: 0;  /* Verwijder afronding */
+    -webkit-box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+  background-color: transparent;
   }
 
   /* Mobile aanpassingen */
@@ -503,7 +511,8 @@
 
   /* Maak de popup inhoud compacter */
   .popup-title {
-      margin-top: 2.5em;
+    margin-top: 2.5em;
+    font-size: 3em !important;
   }
 
   p{
@@ -527,8 +536,8 @@
   }
 
   .popup-description {
-    max-height: 8em;
-    margin-top: 1em;
+    max-height: 7em;
+    margin-top: 0.75em;
     margin-bottom: 5em;
     margin-right: -15px;
     padding-right: 15px;
@@ -651,10 +660,13 @@
 .opening-hours th {
   width: 84px;
 }
+.popup-title.details {
+  margin-top: 0.1em;
+  font-size: 2em !important;
 
-.popup-title {
-  margin-top: 2.5em;
-  font-size: 2.5em !important;
+}
+.opening-hours h2 {
+  margin-bottom: 0em;
 }
 
   }
@@ -747,5 +759,6 @@
   
   /* ar marker  */
   
-  
+  /* CSS voor de pulserende AR-marker */
+
 
