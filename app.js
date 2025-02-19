@@ -1,3 +1,4 @@
+
 $(".locations-map_wrapper").removeClass("is--show"),
   (mapboxgl.accessToken =
     "pk.eyJ1IjoicHJvamVjdGhlZXJsZW4iLCJhIjoiY2x4eWVmcXBvMWozZTJpc2FqbWgzcnAyeCJ9.SVOVbBG6o1lHs6TwCudR9g");
@@ -470,6 +471,12 @@ function getARData() {
         image_ar: _.querySelector("#image_ar").value,
         description_ar: _.querySelector("#description_ar").value,
         link_ar: _.querySelector("#link_ar").value,
+        icon_ar: _.querySelector("#icon_ar").value,
+        stap1: _.querySelector("#stap1").value,
+        stap2: _.querySelector("#stap2").value,
+        stap3: _.querySelector("#stap3").value,
+        stap4: _.querySelector("#stap4").value,
+
 
       },
       e = {
@@ -487,6 +494,11 @@ function getARData() {
           image: a.image_ar,
           color: "black",
           link_ar: a.link_ar,
+          icon: a.icon_ar,
+          stap1: a.stap1,
+          stap2: a.stap2,
+          stap3: a.stap3,
+          stap4: a.stap4,
         },
       };
     mapLocations.features.push(e);
@@ -649,7 +661,6 @@ let createPopupContent = (_) => {
           c
             ? `
           .ar-button {
-            background: #FF6B6B;
             border: 2px solid white;
             font-weight: bold;
           }
@@ -659,7 +670,6 @@ let createPopupContent = (_) => {
           }
 
           .popup-side {
-          background-color: black || '#6B46C1'};
           clip-path: polygon(calc(100% - 0px) 26.5px, calc(100% - 0px) calc(100% - 26.5px), calc(100% - 0px) calc(100% - 26.5px), calc(100% - 0.34671999999995px) calc(100% - 22.20048px), calc(100% - 1.3505599999999px) calc(100% - 18.12224px), calc(100% - 2.95704px) calc(100% - 14.31976px), calc(100% - 5.11168px) calc(100% - 10.84752px), calc(100% - 7.76px) calc(100% - 7.76px), calc(100% - 10.84752px) calc(100% - 5.11168px), calc(100% - 14.31976px) calc(100% - 2.9570399999999px), calc(100% - 18.12224px) calc(100% - 1.35056px), calc(100% - 22.20048px) calc(100% - 0.34672px), calc(100% - 26.5px) calc(100% - 0px), calc(50% - -32.6px) calc(100% - 0px), calc(50% - -32.6px) calc(100% - 0px), calc(50% - -31.57121px) calc(100% - 0.057139999999947px), calc(50% - -30.56648px) calc(100% - 0.2255199999999px), calc(50% - -29.59427px) calc(100% - 0.50057999999996px), calc(50% - -28.66304px) calc(100% - 0.87775999999991px), calc(50% - -27.78125px) calc(100% - 1.3525px), calc(50% - -26.95736px) calc(100% - 1.92024px), calc(50% - -26.19983px) calc(100% - 2.57642px), calc(50% - -25.51712px) calc(100% - 3.31648px), calc(50% - -24.91769px) calc(100% - 4.13586px), calc(50% - -24.41px) calc(100% - 5.03px), calc(50% - -24.41px) calc(100% - 5.03px), calc(50% - -22.95654px) calc(100% - 7.6045699999999px), calc(50% - -21.23752px) calc(100% - 9.9929599999998px), calc(50% - -19.27298px) calc(100% - 12.17519px), calc(50% - -17.08296px) calc(100% - 14.13128px), calc(50% - -14.6875px) calc(100% - 15.84125px), calc(50% - -12.10664px) calc(100% - 17.28512px), calc(50% - -9.36042px) calc(100% - 18.44291px), calc(50% - -6.46888px) calc(100% - 19.29464px), calc(50% - -3.45206px) calc(100% - 19.82033px), calc(50% - -0.32999999999998px) calc(100% - 20px), calc(50% - -0.32999999999998px) calc(100% - 20px), calc(50% - 2.79179px) calc(100% - 19.82033px), calc(50% - 5.8079199999999px) calc(100% - 19.29464px), calc(50% - 8.69853px) calc(100% - 18.44291px), calc(50% - 11.44376px) calc(100% - 17.28512px), calc(50% - 14.02375px) calc(100% - 15.84125px), calc(50% - 16.41864px) calc(100% - 14.13128px), calc(50% - 18.60857px) calc(100% - 12.17519px), calc(50% - 20.57368px) calc(100% - 9.9929599999999px), calc(50% - 22.29411px) calc(100% - 7.60457px), calc(50% - 23.75px) calc(100% - 5.03px), calc(50% - 23.75px) calc(100% - 5.03px), calc(50% - 24.25769px) calc(100% - 4.1358599999999px), calc(50% - 24.85712px) calc(100% - 3.3164799999998px), calc(50% - 25.53983px) calc(100% - 2.57642px), calc(50% - 26.29736px) calc(100% - 1.92024px), calc(50% - 27.12125px) calc(100% - 1.3525px), calc(50% - 28.00304px) calc(100% - 0.87775999999997px), calc(50% - 28.93427px) calc(100% - 0.50057999999996px), calc(50% - 29.90648px) calc(100% - 0.22552000000002px), calc(50% - 30.91121px) calc(100% - 0.057140000000004px), calc(50% - 31.94px) calc(100% - 0px), 26.5px calc(100% - 0px), 26.5px calc(100% - 0px), 22.20048px calc(100% - 0.34671999999989px), 18.12224px calc(100% - 1.3505599999999px), 14.31976px calc(100% - 2.95704px), 10.84752px calc(100% - 5.1116799999999px), 7.76px calc(100% - 7.76px), 5.11168px calc(100% - 10.84752px), 2.95704px calc(100% - 14.31976px), 1.35056px calc(100% - 18.12224px), 0.34672px calc(100% - 22.20048px), 4.3855735949631E-31px calc(100% - 26.5px), 0px 26.5px, 0px 26.5px, 0.34672px 22.20048px, 1.35056px 18.12224px, 2.95704px 14.31976px, 5.11168px 10.84752px, 7.76px 7.76px, 10.84752px 5.11168px, 14.31976px 2.95704px, 18.12224px 1.35056px, 22.20048px 0.34672px, 26.5px 4.3855735949631E-31px, calc(50% - 26.74px) 0px, calc(50% - 26.74px) 0px, calc(50% - 25.31263px) 0.07137px, calc(50% - 23.91544px) 0.28176px, calc(50% - 22.55581px) 0.62559px, calc(50% - 21.24112px) 1.09728px, calc(50% - 19.97875px) 1.69125px, calc(50% - 18.77608px) 2.40192px, calc(50% - 17.64049px) 3.22371px, calc(50% - 16.57936px) 4.15104px, calc(50% - 15.60007px) 5.17833px, calc(50% - 14.71px) 6.3px, calc(50% - 14.71px) 6.3px, calc(50% - 13.6371px) 7.64798px, calc(50% - 12.446px) 8.89024px, calc(50% - 11.1451px) 10.01826px, calc(50% - 9.7428px) 11.02352px, calc(50% - 8.2475px) 11.8975px, calc(50% - 6.6676px) 12.63168px, calc(50% - 5.0115px) 13.21754px, calc(50% - 3.2876px) 13.64656px, calc(50% - 1.5043px) 13.91022px, calc(50% - -0.32999999999996px) 14px, calc(50% - -0.32999999999998px) 14px, calc(50% - -2.16431px) 13.9105px, calc(50% - -3.94768px) 13.6476px, calc(50% - -5.67177px) 13.2197px, calc(50% - -7.32824px) 12.6352px, calc(50% - -8.90875px) 11.9025px, calc(50% - -10.40496px) 11.03px, calc(50% - -11.80853px) 10.0261px, calc(50% - -13.11112px) 8.8992px, calc(50% - -14.30439px) 7.6577px, calc(50% - -15.38px) 6.31px, calc(50% - -15.38px) 6.31px, calc(50% - -16.27279px) 5.18562px, calc(50% - -17.25432px) 4.15616px, calc(50% - -18.31733px) 3.22714px, calc(50% - -19.45456px) 2.40408px, calc(50% - -20.65875px) 1.6925px, calc(50% - -21.92264px) 1.09792px, calc(50% - -23.23897px) 0.62586px, calc(50% - -24.60048px) 0.28184px, calc(50% - -25.99991px) 0.07138px, calc(50% - -27.43px) 8.9116630386686E-32px, calc(100% - 26.5px) 0px, calc(100% - 26.5px) 0px, calc(100% - 22.20048px) 0.34672px, calc(100% - 18.12224px) 1.35056px, calc(100% - 14.31976px) 2.95704px, calc(100% - 10.84752px) 5.11168px, calc(100% - 7.76px) 7.76px, calc(100% - 5.11168px) 10.84752px, calc(100% - 2.9570399999999px) 14.31976px, calc(100% - 1.35056px) 18.12224px, calc(100% - 0.34671999999995px) 22.20048px, calc(100% - 5.6843418860808E-14px) 26.5px); 
         }
         `
@@ -699,19 +709,53 @@ ${
   _.image
     ? `<button class="impressie-button button-base" onclick="window.open('${_.link_ar}', '_blank')">Start AR</button>`
     : ""
-}            <button class="more-info-button button-base">Meer info</button>
+}            <button class="more-info-button button-base">Instructie</button>
           </div>
           </div>
           
      <div class="popup-side popup-back">
   <div class="content-wrapper">
 
-    <div class="popup-title details">${_.name}</div>
+    <div class="popup-title details">Instructie</div>
     <div class="info-content">
-      <!-- Contact info in een description list voor betere semantiek -->
-      <dl class="contact-container">
-        <div class="info-row">
-  <button class="more-info-button button-base">Terug</button>
+
+  
+  <!-- Container voor alle ervaring-stappen -->
+    <div class="experience-steps">
+      <div class="experience-step">
+        <h2 class="experience-step-title">STAP 1</h2>
+        <p class="experience-step-text">
+          ${_.stap1}
+        </p>
+      </div>
+      
+      <div class="experience-step">
+        <h2 class="experience-step-title">STAP 2</h2>
+        <p class="experience-step-text">
+          ${_.stap2}
+        </p>
+      </div>
+      
+      <div class="experience-step">
+        <h2 class="experience-step-title">STAP 3</h2>
+        <p class="experience-step-text">
+        ${_.stap3}
+        </p>
+      </div>
+      
+      <div class="experience-step">
+        <h2 class="experience-step-title">STAP 4</h2>
+        <p class="experience-step-text">
+        ${_.stap4}
+        </p>
+      </div>
+    </div>
+  <!-- Knoppen -->
+  <div class="ar-mural-buttons">
+    <button class="more-info-button button-base">Terug</button>
+    <button class="impressie-button button-base" onclick="window.open('${_.link_ar}', '_blank')">Start AR</button>
+  </div>
+
 </div>
             `,
       }
@@ -1122,7 +1166,11 @@ map.on("click", "location-markers", async (_) => {
         transform: "translateY(40px) scale(0.6)",
         opacity: "0",
       }),
+
+
     $(".locations-map_wrapper").addClass("is--show");
+
+    
   let p = $(".locations-map_item").eq(a.arrayID);
   p.css({
     display: "block",
@@ -1154,6 +1202,10 @@ map.on("click", "location-markers", async (_) => {
     }),
     setupPopupInteractions(o, a, c);
 }),
+
+
+
+
   map.on("load", () => {
     loadIcons(),
       addCustomMarkers(),
@@ -1212,6 +1264,103 @@ map.on("click", "location-markers", async (_) => {
     });
   });
 
+  //!                terug naar map bij uitzoemen              //////////
+ 
+   // 2) zoomend-event: als zoom < 14, 'teleport' naar Heerlen
+   map.on('zoomend', () => {
+    const currentZoom = map.getZoom();
+    if (currentZoom < 14) {
+      // a) Overlay maken (wit + blokkeert interactie)
+      const overlay = document.createElement('div');
+      overlay.id = 'interaction-blocker';
+      document.body.appendChild(overlay);
+
+      // b) FlyTo terug naar Heerlen
+      map.flyTo({
+        center: [5.979642, 50.887634],
+        zoom: 17,
+        pitch: 45,
+        bearing: -17.6,
+        speed: 0.8,
+        curve: 1.5,
+        essential: true
+      });
+
+      // c) Fade de overlay van wit naar transparant
+      gsap.to(overlay, {
+        duration: 2,
+        backgroundColor: "rgba(255,255,255,0)",
+        onComplete: () => {
+          // d) Toon de popup (met in- én uit-animatie) zodra de overlay transparant is
+          showStaggeredPopup(overlay);
+        }
+      });
+    }
+  });
+
+  // 3) Functie om de popup + text-split animatie te tonen
+  function showStaggeredPopup(overlay) {
+    // a) Popup maken met HTML die letters opsplitst
+    const popupText = "heerlen doen";
+    const popupHTML = buildStaggeredTextHTML(popupText);
+
+    const zoomendPopup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false
+    })
+    .setLngLat([5.979642, 50.887634])
+    .setHTML(popupHTML)
+    .addTo(map);
+
+    // b) Bouw een GSAP-timeline voor in- en uit-animatie van de letters
+    const tl = gsap.timeline({
+      onComplete: () => {
+        // Zodra de uit-animatie is voltooid, verwijderen we popup en overlay
+        zoomendPopup.remove();
+        overlay.remove();
+      }
+    });
+
+    // In-animatie (stagger van onder naar boven, fade in)
+    tl.from(".zoomend-popup .letter", {
+      duration: 0.2,
+      opacity: 0,
+      y: 20,
+      stagger: 0.05
+    });
+
+    // Even laten staan (delay/pauze)
+    tl.to(".zoomend-popup .letter", {
+      duration: 0.2,
+      // We animeren in principe niets hier, maar enkel een delay.
+      // Door wel 'stagger' op 0 te zetten en 'duration' op 0.5,
+      // houden we kort de tekst zichtbaar. Of je kunt direct 'delay: 2' doen.
+      // Je kunt dit blok ook vervangen door:  tl.to({}, { duration: 2 });
+    }, "+=1");  // +=1 betekent: wacht 1 seconde na de in-animatie
+
+    // Uit-animatie (stagger naar boven, fade out)
+    tl.to(".zoomend-popup .letter", {
+      duration: 0.2,
+      opacity: 0,
+      y: -20,
+      stagger: 0.05
+    }, "+=1"); // +=1 betekent: start dit 1 seconde na het vorige blok
+  }
+
+  // 4) Hulpfunctie om de string in spans met class="letter" te wikkelen,
+  //    zodat GSAP elke letter individueel kan animeren.
+  function buildStaggeredTextHTML(text) {
+    // Split de string in losse karakters
+    const letters = text.split("");
+    // Zet elke letter (of spatie) in een span. Spaties evt. &nbsp; maken.
+    const letterSpans = letters.map(char => {
+      if (char === " ") char = "&nbsp;";
+      return `<span class="letter">${char}</span>`;
+    }).join("");
+
+    // Wikkel het in een container .zoomend-popup
+    return `<div class="zoomend-popup">${letterSpans}</div>`;
+  }
 
   //!                THREEJS LAYER              //////////
 
@@ -1233,7 +1382,7 @@ const modelConfigs = [
     rotate: [Math.PI / 2, 2.05, 0],
     url: 'https://cdn.jsdelivr.net/gh/Artwalters/3dmodels_heerlen@main/theaterheerlenv4.glb',
     scale: 0.6
-  }
+  },
 ];
 
 // ---[ 1. Voeg hier je image plane configuratie toe ]---
@@ -1407,3 +1556,6 @@ const customLayer = {
 map.on('style.load', () => {
   map.addLayer(customLayer);
 });
+
+
+
