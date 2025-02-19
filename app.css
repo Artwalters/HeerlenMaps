@@ -632,7 +632,8 @@
   }
   
   .opening-hours th {
-    width: 140px;
+  width: 84px;
+    ;
   }
   
   /* Social media icons ruimte (indien nodig) */
@@ -761,4 +762,96 @@
   
   /* CSS voor de pulserende AR-marker */
 
+
+/* Overlay om interactie te blokkeren */
+/* Overlay om interactie te blokkeren */
+#interaction-blocker {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: white;         /* begint volledig wit */
+  pointer-events: all;       /* blokkeert alle muis- en touch-events */
+  z-index: 9999;            /* zit boven de map */
+  cursor: not-allowed;       /* optioneel: cursor laten zien dat interactie geblokkeerd is */
+}
+
+/* Popup-container voor de tekst */
+.zoomend-popup {
+  color: #333;
+  z-index: 10001; /* popup boven de overlay */
+  font-weight: bold;
+    font-family: astronef-std-super-cond, sans-serif;
+    font-size: 10em;
+    font-weight: 200;
+    line-height: 0.75em;
+    text-transform: uppercase;
+    text-align: center;
+    width: 350px;
+    
+}
+
+/* Elke letter wordt inline-block, zodat we ze individueel kunnen animeren */
+.zoomend-popup .letter {
+  display: inline-block;
+  /* Eventueel een klein beetje transform origin, zodat je bijv. 
+     kunt laten 'bouncen' vanaf de onderkant: */
+  transform-origin: bottom;
+}
+
+.experience-step-title {
+  font-size: 1.2rem;
+  margin-bottom: 0px;
+}
+
+
+
+.experience-step-text {
+  font-size: 0.75rem;
+  font-family: poppins, sans-serif;
+  font-weight: normal;
+  line-height: 1.4; /* Compactere regelhoogte */
+
+}
+
+
+.experience-steps {
+  -webkit-overflow-scrolling: touch;
+  max-height: 13.5rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  margin-right: -15px;
+  padding-right: 15px;
+  overflow-y: scroll;
+  touch-action: pan-y;     /* Laat verticale drag scrollen toe */
+  cursor: grab;           /* Geeft aan dat je kunt draggen */
+}
+.experience-steps:active {
+  cursor: grabbing;
+}
+
+
+/* Optioneel: custom scrollbar styling */
+.experience-steps::-webkit-scrollbar {
+  width: 5px;
+  background-color: transparent;
+}
+
+.experience-steps::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.experience-steps::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.experience-steps, 
+.experience-steps * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  touch-action: pan-y !important;
+}
 
