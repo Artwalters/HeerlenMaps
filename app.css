@@ -77,7 +77,7 @@
   }
   
   .mapboxgl-ctrl-group {
-    background: #EFEAE6 !important;
+    background: #efeae6 !important;
     border: 2px solid black !important;
     box-shadow: none !important;
   }
@@ -854,5 +854,6 @@
   -webkit-user-select: none !important;
   touch-action: pan-y !important;
 }
+
 
 
