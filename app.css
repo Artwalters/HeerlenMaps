@@ -77,7 +77,7 @@
   }
   
   .mapboxgl-ctrl-group {
-    background: #efeae6 !important;
+    background: #f3f3f3 !important;
     border: 2px solid black !important;
     box-shadow: none !important;
   }
@@ -88,7 +88,7 @@
   }
   
   .mapboxgl-ctrl-bottom-right {
-    bottom: 6rem !important;
+    bottom: 2rem !important;
     margin-right: 4rem;
   }
   
@@ -184,7 +184,7 @@
     bottom: clamp(90px, 15vh, 120px);
     right: 10px;
     transform: translateX(120%);
-    background: #FAF3E3;
+    background: #f3f3f3;
     padding: clamp(15px, 5vw, 20px);
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
@@ -216,23 +216,26 @@
     }
   }
   
-  .location-boundary-popup h3 {
-    font-family: astronef, sans-serif;
-    color: #1a1a1a;
-    font-size: clamp(1.8em, 6vw, 2.2em);
-    margin-bottom: clamp(8px, 2vw, 12px);
-    font-weight: 600;
-    line-height: 1.1;
+  h3 {
+    margin-top: 20px;
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: bold;
+    font-family: astronef-std-super-cond, sans-serif !important;
+    font-size: 2em;
+    font-weight: 200;
+    line-height: 0.75em;
     text-transform: uppercase;
-    letter-spacing: 0.02em;
-  }
-  
+    text-align: left;
+    margin-top: -em;
+}
+
   .location-boundary-popup p {
     font-family: poppins, sans-serif;
     color: #4A4A4A;
     margin-bottom: clamp(15px, 4vw, 20px);
-    line-height: 1.6;
-    font-size: clamp(1em, 3.5vw, 1.2em);
+    line-height: 1.2;
+
   }
   
   .location-boundary-popup button {
@@ -459,30 +462,53 @@
     bottom: 30px;
     left: 30px;
   }
-  
   .close-button {
     position: absolute;
-    top: -15px;
+    top: -18px;
     left: 50%;
     transform: translateX(-50%);
-    color: white;
+    background: #333;
     border-radius: 50%;
-    width: 25px;
-    height: 25px;
+    width: 24px; /* Reduced from 30px */
+    height: 24px; /* Reduced from 30px */
+    cursor: pointer;
+    z-index: 20;
+    padding: 0;
+    margin: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transform-origin: center;
-    transition: all 0.3s ease;
-    z-index: 20;
-    user-select: none !important;
-    outline: none !important;
+    overflow: visible;
+    transition: transform 0.3s ease;
   }
   
   .close-button:hover {
-    transform: translateX(-50%) rotate(90deg) scale(1.1);
+    transform: translateX(-50%) rotate(180deg);
+    scale: 1.1;
   }
+  
+  /* Create a perfectly centered X */
+  .close-button::before,
+  .close-button::after {
+    content: '';
+    position: absolute;
+    background-color: white;
+    width: 12px; /* Proportionally reduced */
+    height: 2px; /* Slightly thinner line */
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+    top: 50%;
+    left: 50%;
+  }
+  
+  .close-button::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  
+  .close-button::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+  
   
   /* Clean Bar Scrollbar Styling */
   
