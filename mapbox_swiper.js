@@ -1,4 +1,3 @@
-import "./app.css";
 
 /**
  * Main Application - Heerlen Interactive Map with Button Navigation
