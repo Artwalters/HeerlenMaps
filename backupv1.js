@@ -1,6 +1,4 @@
 
-import "./app.css";
-
 $(".locations-map_wrapper").removeClass("is--show"),
   (mapboxgl.accessToken =
     "pk.eyJ1IjoicHJvamVjdGhlZXJsZW4iLCJhIjoiY2x4eWVmcXBvMWozZTJpc2FqbWgzcnAyeCJ9.SVOVbBG6o1lHs6TwCudR9g");
